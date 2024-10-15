@@ -4,6 +4,9 @@
 #include <map>
 
 int main(void){
+    std::ios::sync_with_stdio(0);
+    std::cin.tie(0);
+    
     int N,x;
     std::cin >> N;
     std::vector<int> invec;
