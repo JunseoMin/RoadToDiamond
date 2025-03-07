@@ -1,5 +1,5 @@
 from collections import deque
-
+##
 def bfs(start, maps, target):
     queue = deque([(start[0], start[1], 1)])
     visited = set([start])
