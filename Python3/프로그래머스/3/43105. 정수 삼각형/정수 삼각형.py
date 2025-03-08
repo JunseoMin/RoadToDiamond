@@ -1,16 +1,17 @@
 def solution(triangle):
-    answer = 0    
-    dy_pyra = [[0 for __ in range(len(triangle[_]))] for _ in range(len(triangle))]
+    answer = 0
     
-    for depth in range(len(triangle)):
-        for idx in range(len(triangle[depth])):
-            if idx == 0 and depth == 0:
-                dy_pyra[0][0] = triangle[0][0]
-            elif idx == 0:
-                dy_pyra[depth][idx] = dy_pyra[depth-1][0] + triangle[depth][idx]
-            elif idx == len(triangle[depth])-1:
-                dy_pyra[depth][idx] = dy_pyra[depth-1][len(triangle[depth])-2] + triangle[depth][idx]
-            else:
-                dy_pyra[depth][idx] = max(dy_pyra[depth-1][idx-1],dy_pyra[depth-1][idx]) + triangle[depth][idx]
-                
-    return max(dy_pyra[len(triangle)-1])
+    dp = [[0 for _ in range(len(triangle[i]))] for i in range(len(triangle))]
+    
+    dp[0] = triangle[0]
+    
+    for step in range(1,len(triangle)):
+        for i in range(len(triangle[step])):
+            if i == 0:
+                dp[step][i] = dp[step - 1][0] + triangle[step][i]
+            if i >= 1 and i < len(triangle[step]) - 1:
+                dp[step][i] = max(dp[step - 1][i -1], dp[step - 1][i]) + triangle[step][i]
+            if i == (len(triangle[step]) - 1):
+                dp[step][i] = dp[step - 1][-1] + triangle[step][i]
+    
+    return max(dp[-1])
