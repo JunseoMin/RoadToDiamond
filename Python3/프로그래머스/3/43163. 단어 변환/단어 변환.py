@@ -1,29 +1,26 @@
 from collections import deque
 
-def isDiffOne(w1,w2):
-    cnt = 0
-    for i in range(len(w1)):
-        if w1[i] != w2[i]:
-            cnt += 1
-            
-    return True if cnt == 1 else False
-
 def solution(begin, target, words):
     answer = 0
+    visited = set()
     queue = deque([(begin,0)])
-    visited = set([begin])
+    wL = len(words[0])
     
     while queue:
-        word, d = queue.popleft()
+        curr,cost = queue.popleft()
+        if (curr) in visited:
+            continue
+        visited.add(tuple(curr))
         
-        if word == target:
-            return d
+        if curr == target:
+            return cost
         
-        for nextw in words:
-            if nextw in visited:
-                continue
-            
-            if isDiffOne(word,nextw):
-                queue.append((nextw,d+1))
-                visited.add(nextw)
+        for word in words:
+            cnt = 0
+            for i in range(wL):
+                if word[i] != curr[i]:
+                    cnt += 1
+            if cnt == 1 and tuple(word) not in visited:
+                queue.append((word, cost + 1))
+    
     return 0
