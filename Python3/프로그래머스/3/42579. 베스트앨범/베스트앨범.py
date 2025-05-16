@@ -1,41 +1,43 @@
+from collections import defaultdict
+
 def solution(genres, plays):
     answer = []
-    genre_dict = {}
+    songs = []
 
-    valuelist = []
-    for i in range(len(plays)):
-        genre_dict[genres[i]] = 0
+    genredict = defaultdict(list)
+    
+    for i in range(len(genres)):
+        song = {"genre":genres[i], "played":plays[i]}
+        songs.append(song)
+    
+    for i in range(len(songs)):
+        genredict[songs[i]["genre"]].append((songs[i]["played"],i))
+    
+    genre = defaultdict(list)
+    genli = []
+    for k,v in genredict.items():
+        s = 0
+        for n in v:
+            s += n[0]
+        genli.append((s,k))
         
-    for i in range(len(plays)):
-        genre_dict[genres[i]] += plays[i]
+        v.sort(reverse = True)
+        genre[k].append(v[0])
+        if len(v) >= 2:
+            genre[k].append(v[1])
+        
+    genli.sort(reverse = True)
+    # print(genre)
     
-    genre_list = list(genre_dict.items())
-    re_genre = []
-    
-    for _,value in genre_list:
-        re_genre.append([value,_])
-    re_genre.sort(reverse = True)
-    
-    num_genres_dict = {}
-    
-    for i in range(len(genres)):
-        num_genres_dict[genres[i]] = []
-    
-    for i in range(len(genres)):
-        tmp = num_genres_dict[genres[i]]
-        tmp.append((plays[i],i))
-        num_genres_dict[genres[i]] = tmp
-        num_genres_dict[genres[i]].sort(reverse = True)
-    
-    for _,key in re_genre:
-        if len(num_genres_dict[key]) == 1:
-            answer.append(num_genres_dict[key][0][1])
-        else:
-            if num_genres_dict[key][0][0] == num_genres_dict[key][1][0]:
-                answer.append(min(num_genres_dict[key][0][1],num_genres_dict[key][1][1]))
-                answer.append(max(num_genres_dict[key][0][1],num_genres_dict[key][1][1]))
+    for _,tarGanre in genli:
+        if len(genre[tarGanre]) >= 2:
+            if genre[tarGanre][0][0] == genre[tarGanre][1][0]:
+                answer.append(genre[tarGanre][1][1])
+                answer.append(genre[tarGanre][0][1])
             else:
-                answer.append(num_genres_dict[key][0][1])
-                answer.append(num_genres_dict[key][1][1])
-
+                answer.append(genre[tarGanre][0][1])
+                answer.append(genre[tarGanre][1][1])
+        else:
+            answer.append(genre[tarGanre][0][1])
+        
     return answer
