@@ -41,6 +41,6 @@ def solution(p):
         return u + solution(v)
     else:
         answer = "(" + solution(v) + ")"
-        u = u[1:len(u)-1]
+        u = u[1:-1]
         answer += shift(u)
         return answer
