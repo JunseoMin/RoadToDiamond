@@ -1,18 +1,21 @@
-def dfs():
-    return
+from collections import deque
 
 def solution(numbers, target):
-    stack = [(0,0)]
-    ans = 0
+    answer = 0
     
-    while stack:
-        curr, idx = stack.pop()
+    queue = deque(numbers)
+    prevs = [0]
+    while queue:
+        n = queue.popleft()
         
-        if idx == len(numbers):
-            if curr == target:
-                ans += 1
-        else:
-            stack.append((curr - numbers[idx],idx+1))
-            stack.append((curr + numbers[idx],idx+1))
+        tmp = []
+        for prev in prevs:
+            tmp.append(prev + n)
+            tmp.append(prev - n)
+        prevs = tmp
+        
+    for v in prevs:
+        if v == target:
+            answer += 1
     
-    return ans
+    return answer
