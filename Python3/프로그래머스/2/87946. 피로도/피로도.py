@@ -1,16 +1,17 @@
-import itertools
+from itertools import permutations as perm
 
 def solution(k, dungeons):
     answer = -1
+    paths = perm(dungeons)
     
-    paths = itertools.permutations(dungeons)
     for path in paths:
-        full = k
-        passed = 0
-        for mintired, cost in path:
-            if mintired <= full and full - cost >= 0:
-                full = full - cost
-                passed += 1
-        answer = max(answer,passed)
+        current = k
+        cnt = 0
+        for minimum, cost in path:
+            if current < minimum:
+                break
+            current -= cost
+            cnt += 1
+        answer = max(answer,cnt)
     
     return answer
