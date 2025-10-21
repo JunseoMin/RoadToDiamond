@@ -1,21 +1,24 @@
+from collections import deque
 
 def solution(priorities, location):
-    ans = 1
-    cp = priorities[:]
-    cp[location] += 10
-    
-    while (len(priorities)):
-        if max(priorities) == cp[0]%10:
-            if cp[0]>10:
-                return ans
-            
-            priorities.pop(0)
-            cp.pop(0)
-            ans += 1
+    answer = 0
+    queue = []
+    for i,p in enumerate(priorities):
+        if i == location:
+            queue.append((p,True))
         else:
-            priorities.append(priorities[0])
-            priorities.pop(0)
-            cp.append(cp[0])
-            cp.pop(0)
-                
-    return -1
+            queue.append((p,False))
+    queue = deque(queue)
+    while queue:
+        maxi = max(queue)
+        v,k = queue.popleft()
+        
+        if v != maxi[0]:
+            queue.append((v,k))
+            continue
+        
+        if v == maxi[0] and k:
+            return answer + 1
+        answer += 1
+            
+            
